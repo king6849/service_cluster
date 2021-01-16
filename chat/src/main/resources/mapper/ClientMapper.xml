@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.king.bishe.chat.mapper.ClientMapper">
+
+    <insert id="saveMessage" parameterType="Chat">
+        insert into chat(fromWho, target, msgType, makeTime, msg)
+        values (#{fromWho}, #{target}, #{msgType}, #{makeTime}, #{msg})
+    </insert>
+
+    <select id="getChat" parameterType="int" resultType="com.king.bishe.chat.Pojo.Chat">
+        select *
+        from chat
+        where id = #{id}
+    </select>
+
+</mapper>
