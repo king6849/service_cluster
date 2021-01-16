@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="consumer" />
+        <module name="chat" />
+        <module name="backend_system" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="backend_system" target="1.8" />
+      <module name="chat" target="1.8" />
+      <module name="consumer" target="1.8" />
+      <module name="public_component" target="1.8" />
+      <module name="registration_center" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="backend_system" options="-parameters" />
+      <module name="chat" options="-parameters" />
+      <module name="consumer" options="-parameters" />
+      <module name="public_component" options="-parameters" />
+      <module name="registration_center" options="" />
+    </option>
+  </component>
+</project>

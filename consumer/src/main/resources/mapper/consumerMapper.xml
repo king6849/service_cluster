@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.king.graduation.consumer.Mapper.consumerMapper">
+    <!--   注册-->
+    <insert id="register" parameterType="string">
+        insert into user(phone, password)
+        values (#{phone}, #{password})
+    </insert>
+
+    <!--    账号登录-->
+    <select id="accountLogin" parameterType="string" resultType="com.king.graduation.consumer.Entity.User">
+        select id, phone, password
+        from user
+        where phone = #{phone}
+    </select>
+    <!--微信登录-->
+    <insert id="weChatLogin" parameterType="string">
+        insert into user(openId)
+        values (#{openId})
+    </insert>
+
+    <select id="exitOpenId" parameterType="string" resultType="_long">
+        select id
+        from user
+        where openId = #{openId}
+    </select>
+
+    <!--    新添购票记录-->
+    <insert id="buyATicket">
+        insert into ticketRecord(numbers, totalPrice, bookTime, effectiveTime, uId, tId)
+        VALUES (#{numbers}, #{totalPrice}, #{bookTime}, #{effectiveTime}, #{uId}, #{tId})
+    </insert>
+
+    <!--更新票数-->
+    <update id="desTicketNumbers">
+        update ticketType
+        set allNumbers=allNumbers - #{numbers}
+        where ticketId = #{tId}
+    </update>
+
+    <!--    获取ticketType的id-->
+    <select id="getTicketTypeId" parameterType="string" resultType="com.king.graduation.consumer.Entity.TicketType">
+        select *
+        from ticketType
+        where ticketName = #{ticketName}
+    </select>
+
+    <!--票数检查-->
+    <select id="ticketNumbers" resultType="java.lang.Integer">
+        select allNumbers
+        from ticketType
+        where
+        <trim suffixOverrides="or">
+            <choose>
+                <when test="ticketName != null and ticketName != ''">
+                    ticketName=#{ticketName} or
+                </when>
+                <otherwise>
+                    ticketId=#{ticketId}
+                </otherwise>
+            </choose>
+        </trim>
+    </select>
+
+    <select id="ticketTypeInfo" resultType="com.king.graduation.consumer.Entity.TicketType">
+        select * from ticketType where
+        <trim suffixOverrides=",">
+            <choose>
+                <when test="ticketName!=null  and ticketName!=''">
+                    ticketName=#{ticketName},
+                </when>
+                <when test="ticketId >=1">
+                    <!--@ignoreSql-->
+                    ticketId=#{ticketId}
+                </when>
+            </choose>
+        </trim>
+    </select>
+
+    <!--    拉取个人个人信息-->
+    <select id="loadPersonalInfo" parameterType="int" resultType="com.king.graduation.consumer.Pojo.LoginUserPojo">
+        select avatar, nickName, sex, phone, overage
+        from user u
+                 join membershipCard m on u.id = m.uid
+        where u.id = #{id}
+    </select>
+    <!--    更新头像-->
+    <update id="updatePersonal">
+        update user set
+        <trim suffixOverrides=",">
+            <choose>
+                <when test=" sex != null and nickName != null">
+                    sex=#{sex},
+                    nickName=#{nickName},
+                </when>
+                <when test="phone != null and phone != ''">
+                    phone=#{phone},
+                </when>
+                <otherwise>
+                    password=#{password}
+                </otherwise>
+            </choose>
+        </trim>
+        where id=#{id}
+
+    </update>
+
+    <!--   验证密码-->
+    <select id="getPassword" resultType="string" parameterType="long">
+        select password
+        from user
+        where id = #{id}
+    </select>
+
+    <!--    更新头像-->
+    <update id="updateAvatar">
+        update user
+        set avatar=#{avatar}
+        where id = #{id}
+    </update>
+
+</mapper>
