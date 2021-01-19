@@ -16,10 +16,14 @@ public class DateUtil {
 
     public static Date currentDate(int year, int month, int dates, int week) {
         Calendar calendar = Calendar.getInstance();
-        calendar.add(calendar.YEAR, year);//把日期往后增加一年.整数往后推,负数往前移动
-        calendar.add(calendar.DAY_OF_MONTH, month);//把日期往后增加一个月.整数往后推,负数往前移动
-        calendar.add(calendar.DATE, dates);//把日期往后增加一天.整数往后推,负数往前移动
-        calendar.add(calendar.WEEK_OF_MONTH, week);//把日期往后增加一个月.整数往后推,负数往前移动
+        //把日期往后增加一年.整数往后推,负数往前移动
+        calendar.add(Calendar.YEAR, year);
+        //把日期往后增加一个月.整数往后推,负数往前移动
+        calendar.add(Calendar.DAY_OF_MONTH, month);
+        //把日期往后增加一天.整数往后推,负数往前移动
+        calendar.add(Calendar.DATE, dates);
+        //把日期往后增加一个月.整数往后推,负数往前移动
+        calendar.add(Calendar.WEEK_OF_MONTH, week);
         return calendar.getTime();
     }
 

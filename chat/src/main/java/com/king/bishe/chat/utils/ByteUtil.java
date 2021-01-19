@@ -12,6 +12,11 @@ import java.io.Serializable;
 import java.nio.ByteBuffer;
 
 
+/**
+ * 字节文件处理
+ *
+ * @author king
+ */
 public class ByteUtil {
 
     public static byte[] getBytes(Serializable obj) throws IOException {

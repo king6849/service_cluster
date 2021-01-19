@@ -10,11 +10,7 @@ import com.king.graduation.consumer.Mapper.consumerMapper;
 import com.king.graduation.consumer.Mapper.consumerMapperPlus;
 import com.king.graduation.consumer.Pojo.LoginUserPojo;
 import com.king.graduation.consumer.Pojo.TicketRecodedPojo;
-import com.king.graduation.consumer.utils.GenerateCode;
-import com.king.graduation.consumer.utils.RedisUtil;
-import com.king.graduation.consumer.utils.ResultVO;
-import com.king.graduation.consumer.utils.ResultVOForType;
-import com.king.graduation.consumer.utils.TokenUtil;
+import com.king.graduation.consumer.utils.*;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.RandomStringUtils;
@@ -89,7 +85,9 @@ public class ConsumerServiceStanderImpl implements ConsumerServices {
             //手机验证码登录
             String key = user.getPhone() + "_code";
             String userCode = redisUtil.stringGet(key);
-            if (!verifyCode(code, userCode)) return ResultVO.getFailureResultVO("验证码错误");
+            if (!verifyCode(code, userCode)) {
+                return ResultVO.getFailureResultVO("验证码错误");
+            }
             redisUtil.del(key);
             return ResultVO.getSuccessResultVO("登录成功", TokenUtil.getToken(accountLogin));
         } else {
@@ -158,10 +156,13 @@ public class ConsumerServiceStanderImpl implements ConsumerServices {
     @Override
     @Transactional
     public ResultVO BuyTicket(TicketRecodedPojo ticket, String token) {
-        if (ticket.getTicketName() == null) return ResultVO.getFailureResultVO("数据异常,请重新操作");
+        if (ticket.getTicketName() == null) {
+            return ResultVO.getFailureResultVO("数据异常,请重新操作");
+        }
         int ticketNumbers = consumerMapper.ticketNumbers(ticket.getTId(), ticket.getTicketName());
-        if (ticketNumbers - ticket.getNumbers() < 0)
+        if (ticketNumbers - ticket.getNumbers() < 0) {
             return ResultVO.getFailureResultVO("库存不足,无法购买您所需的" + ticket.getNumbers() + "张票");
+        }
         TicketType ticketType = consumerMapper.getTicketTypeId(ticket.getTicketName());
 
         ticket.setTicketType(ticketType);
@@ -190,7 +191,9 @@ public class ConsumerServiceStanderImpl implements ConsumerServices {
         Claims claims = TokenUtil.parseJWT(token);
         int uid = (int) claims.get("uid");
         LoginUserPojo userPojo = consumerMapper.loadPersonalInfo(uid);
-        if (userPojo == null) return resultVOForType.getFailureResultVO("不存在该用户");
+        if (userPojo == null) {
+            return resultVOForType.getFailureResultVO("不存在该用户");
+        }
         return resultVOForType.getSuccessResultVO("获取个人信息成功", userPojo);
     }
 
@@ -201,8 +204,12 @@ public class ConsumerServiceStanderImpl implements ConsumerServices {
      */
     @Override
     public ResultVO updatePersonalInfo(User user) {
-        if (user.getId() == 0) return ResultVO.getFailureResultVO("用户数据异常");
-        if (consumerMapper.updatePersonal(user) <= 0) return ResultVO.getFailureResultVO("更新失败");
+        if (user.getId() == 0) {
+            return ResultVO.getFailureResultVO("用户数据异常");
+        }
+        if (consumerMapper.updatePersonal(user) <= 0) {
+            return ResultVO.getFailureResultVO("更新失败");
+        }
         return ResultVO.getSuccessResultVO("更新成功");
     }
 
@@ -248,7 +255,9 @@ public class ConsumerServiceStanderImpl implements ConsumerServices {
         System.out.println("uid is " + TokenUtil.parseJWTForKey(token, "uid"));
         String oldPassword = consumerMapper.getPassword(TokenUtil.parseJWTForKey(token, "uid"));
         System.out.println("oldPassword is " + oldPassword);
-        if (!password.equals(oldPassword)) return ResultVO.getFailureResultVO("密码不正确");
+        if (!password.equals(oldPassword)) {
+            return ResultVO.getFailureResultVO("密码不正确");
+        }
         return ResultVO.getSuccessResultVO("验证通过");
     }
 }

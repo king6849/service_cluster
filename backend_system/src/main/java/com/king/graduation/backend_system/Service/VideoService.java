@@ -1,6 +1,6 @@
 package com.king.graduation.backend_system.Service;
 
-import com.king.graduation.backend_system.Utils.ResultVO;
+import utils.ResultVO;
 
 /**
  * @author king

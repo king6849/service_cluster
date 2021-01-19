@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/backend_system/backend_system.iml" filepath="$PROJECT_DIR$/backend_system/backend_system.iml" />
       <module fileurl="file://$PROJECT_DIR$/chat/chat.iml" filepath="$PROJECT_DIR$/chat/chat.iml" />
+      <module fileurl="file://$PROJECT_DIR$/comment/comment.iml" filepath="$PROJECT_DIR$/comment/comment.iml" />
       <module fileurl="file://$PROJECT_DIR$/consumer/consumer.iml" filepath="$PROJECT_DIR$/consumer/consumer.iml" />
       <module fileurl="file://$PROJECT_DIR$/registration_center/registration_center.iml" filepath="$PROJECT_DIR$/registration_center/registration_center.iml" />
     </modules>

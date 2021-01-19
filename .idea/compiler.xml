@@ -9,12 +9,14 @@
         <outputRelativeToContentRoot value="true" />
         <module name="consumer" />
         <module name="chat" />
+        <module name="comment" />
         <module name="backend_system" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="backend_system" target="1.8" />
       <module name="chat" target="1.8" />
+      <module name="comment" target="1.5" />
       <module name="consumer" target="1.8" />
       <module name="public_component" target="1.8" />
       <module name="registration_center" target="1.8" />
@@ -22,7 +24,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="backend_system" options="-parameters" />
+      <module name="backend_system" options="" />
       <module name="chat" options="-parameters" />
       <module name="consumer" options="-parameters" />
       <module name="public_component" options="-parameters" />

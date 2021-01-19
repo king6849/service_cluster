@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.king.bishe.chat.Pojo.Chat;
 import org.springframework.stereotype.Component;
 
-/**
+/** 对象转换
  * @author king
  * @date 2020/11/12 14:27
  */

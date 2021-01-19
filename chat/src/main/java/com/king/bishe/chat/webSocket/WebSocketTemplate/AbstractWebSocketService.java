@@ -46,7 +46,8 @@ public abstract class AbstractWebSocketService implements webSocketService {
             JSONObject jsonObject = (JSONObject) JSONObject.parse(data.text());
             String type = jsonObject.getString("type");
             log.info("type is {}", type);
-            if (type.equals(mappingMark)) {//建立连接
+            //建立连接
+            if (type.equals(mappingMark)) {
                 //建立连接消息格式：let info = {type: "chat_basic_info", info: this.starffInfo}
                 log.info("客户连接信息：{}", jsonObject);
                 JSONObject info = (JSONObject) jsonObject.get("info");
@@ -59,10 +60,10 @@ public abstract class AbstractWebSocketService implements webSocketService {
                 }
                 //用户类型分组
                 sort(info.getIntValue("role"), nickName, ctx.channel());
-            } else if (type.equals(chatMark)) {//一对一发送消息
+                //一对一发送消息
+            } else if (type.equals(chatMark)) {
                 log.info("接收到的msg对象:{}", jsonObject);
                 //消息格式：textMsg: {type: "chat", from: A, target: B, msg: ""}
-
                 chat(ctx, jsonObject.getString("target"), data);
             }
         } else if (msg instanceof BinaryWebSocketFrame) {

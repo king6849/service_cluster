@@ -5,17 +5,16 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
 import javax.annotation.PostConstruct;
 
+/**
+ * @author king
+ */
 @SpringBootApplication
 @MapperScan("com.king.bishe.chat.mapper")
-@EnableEurekaClient
-@EnableFeignClients
 public class ChatApplication {
 
     @Autowired

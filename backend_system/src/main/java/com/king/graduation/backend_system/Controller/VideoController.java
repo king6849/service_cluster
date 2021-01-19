@@ -1,11 +1,11 @@
 package com.king.graduation.backend_system.Controller;
 
 import com.king.graduation.backend_system.Service.VideoService;
-import com.king.graduation.backend_system.Utils.ResultVO;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import utils.ResultVO;
 
 import javax.annotation.Resource;
 

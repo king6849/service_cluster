@@ -8,6 +8,7 @@
         <option value="$PROJECT_DIR$/consumer/pom.xml" />
         <option value="$PROJECT_DIR$/backend_system/pom.xml" />
         <option value="$PROJECT_DIR$/chat/pom.xml" />
+        <option value="$PROJECT_DIR$/comment/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

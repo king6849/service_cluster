@@ -2,7 +2,7 @@ package com.king.bishe.chat.webSocket.WebSocketBaseConfig;
 
 
 import com.king.bishe.chat.webSocket.WebSocketTemplate.AbstractWebSocketService;
-import com.king.bishe.chat.webSocket.WebSocketTemplate.WsUserListImpl;
+import com.king.bishe.chat.webSocket.WebSocketTemplate.WsUserBaseClient;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelId;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -10,9 +10,12 @@ import io.netty.channel.group.ChannelGroup;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.extern.slf4j.Slf4j;
 
+/**传输文本格式
+ * @author king
+ */
 @Slf4j
 public class WSTextHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
-    private final WsUserListImpl wsUserList = new WsUserListImpl();
+    private final WsUserBaseClient wsUserList = new WsUserBaseClient();
 
     private final ChannelGroup userChannelGroup = AbstractWebSocketService.getChannelGroup();
 

@@ -8,11 +8,11 @@
     <name>backend_system</name>
     <description>Demo project for Spring Boot</description>
 
-    <parent>
-        <artifactId>registration_center</artifactId>
-        <groupId>com.king.graduation</groupId>
-        <version>0.0.1-SNAPSHOT</version>
-    </parent>
+<!--    <parent>-->
+<!--        <artifactId>registration_center</artifactId>-->
+<!--        <groupId>com.king.graduation</groupId>-->
+<!--        <version>0.0.1-SNAPSHOT</version>-->
+<!--    </parent>-->
 
     <properties>
         <java.version>1.8</java.version>
@@ -32,10 +32,10 @@
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>2.1.4</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>mysql</groupId>
@@ -94,19 +94,24 @@
             <version>1.4.4</version>
         </dependency>
 <!--        公共模块-->
-
-
+        <dependency>
+            <groupId>org.king.graduation</groupId>
+            <artifactId>comment</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+                                                                                                                                                                                                                       
     </dependencies>
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.springframework.cloud</groupId>-->
+<!--                <artifactId>spring-cloud-dependencies</artifactId>-->
+<!--                <version>${spring-cloud.version}</version>-->
+<!--                <type>pom</type>-->
+<!--                <scope>import</scope>-->
+<!--            </dependency>-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>

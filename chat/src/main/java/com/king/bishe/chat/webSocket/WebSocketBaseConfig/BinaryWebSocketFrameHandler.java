@@ -5,6 +5,11 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 
+/**
+ * 传输二进制文件格式
+ *
+ * @author king
+ */
 public class BinaryWebSocketFrameHandler extends SimpleChannelInboundHandler<BinaryWebSocketFrame> {
 
 
@@ -15,7 +20,6 @@ public class BinaryWebSocketFrameHandler extends SimpleChannelInboundHandler<Bin
         content.writeBytes(msg.content());
 
     }
-
 
 
 }

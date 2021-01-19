@@ -6,6 +6,9 @@ import com.king.bishe.chat.Pojo.User;
 import javax.websocket.EncodeException;
 import javax.websocket.EndpointConfig;
 
+/** 二进制化 传输对象 ,编码
+ * @author king
+ */
 public class UserEncoder implements javax.websocket.Encoder.Text<User> {
 
     @Override

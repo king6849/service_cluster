@@ -3,8 +3,8 @@ package com.king.graduation.backend_system.ServicesImpl;
 import com.king.graduation.backend_system.Enties.Video;
 import com.king.graduation.backend_system.Mapper.VideoMapper;
 import com.king.graduation.backend_system.Service.VideoService;
-import com.king.graduation.backend_system.Utils.ResultVO;
 import org.springframework.stereotype.Service;
+import utils.ResultVO;
 
 import javax.annotation.Resource;
 
