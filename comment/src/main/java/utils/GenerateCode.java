@@ -1,9 +1,9 @@
-package com.king.graduation.consumer.utils;
-
-import org.junit.Test;
+package utils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -23,6 +23,8 @@ public class GenerateCode {
     private static final int CHARSLen = CHARS.length;
     // 字符数量
     private static final int SIZE = 4;
+    //视屏唯一编码
+    private static final int VIDEO_SIZE = 25;
     // 干扰线数量
     private static final int LINES = 5;
     // 宽度
@@ -32,7 +34,14 @@ public class GenerateCode {
     // 字体大小
     private static final int FONT_SIZE = 30;
 
+    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
+    /**
+     * @Describe 验证码
+     * @Author king
+     * @Date 2021/1/21 - 22:27
+     * @Params []
+     */
     public static String getSingleCode() {
         StringBuilder stringBuilder = new StringBuilder(6);
         for (int i = 0; i < SIZE; i++) {
@@ -42,15 +51,22 @@ public class GenerateCode {
         return stringBuilder.toString();
     }
 
-    @Test
-    public void test() {
-        StringBuilder stringBuilder = new StringBuilder(6);
-        for (int i = 0; i < SIZE; i++) {
+    /**
+     * @Describe 获取视屏编码
+     * @Author king
+     * @Date 2021/1/21 - 22:30
+     * @Params []
+     */
+    public static String getVideoCode() {
+
+        StringBuffer stringBuffer = new StringBuffer(VIDEO_SIZE);
+        for (int i = 0; i < VIDEO_SIZE; i++) {
             int index = (int) (Math.random() * (CHARSLen));
-            stringBuilder.append(CHARS[index]);
+            stringBuffer.append(CHARS[index]);
         }
-        System.out.println(stringBuilder.toString());
+        return stringBuffer.toString();
     }
+
 
     /**
      * 生成随机验证码及图片
@@ -103,4 +119,24 @@ public class GenerateCode {
         return new Color(ran.nextInt(256), ran.nextInt(256), ran.nextInt(256));
     }
 
+
+    /**
+     * @Describe 随机生成订单号
+     * @Author king
+     * @Date 2021/1/23 - 16:48
+     * @Params []
+     */
+    public static String getOrderIdByTime() {
+        return simpleDateFormat.format(new Date()) + getOrderCode();
+    }
+
+    public static String getOrderCode() {
+
+        StringBuffer stringBuffer = new StringBuffer(10);
+        for (int i = 0; i < 10; i++) {
+            int index = (int) (Math.random() * (CHARSLen));
+            stringBuffer.append(CHARS[index]);
+        }
+        return stringBuffer.toString();
+    }
 }

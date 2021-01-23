@@ -1,7 +1,7 @@
 package com.king.graduation.consumer.ConsumerServices;
 
-import com.king.graduation.consumer.Entity.User;
-import com.king.graduation.consumer.Pojo.TicketRecodedPojo;
+import Enties.User;
+import com.king.graduation.consumer.Pojo.BuyTicketPojo;
 import com.king.graduation.consumer.utils.ResultVO;
 import com.king.graduation.consumer.utils.ResultVOForType;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,14 +29,17 @@ public interface ConsumerServices {
      * @Author king
      * @Date 2020/12/2
      */
-    ResultVO BuyTicket(TicketRecodedPojo ticket, String token);
+    ResultVO BuyTicket(BuyTicketPojo ticket, String token);
 
     /**
      * @Describe 获取剩余容量
      * @Author king
      * @Date 2020/12/2
      */
-    ResultVO remainingNumber(long id,String tickName);
+    ResultVO loadTicketInfo();
+
+
+    ResultVO loadShoppingCarInfo();
 
     /**
      * @Describe 加载个人信息

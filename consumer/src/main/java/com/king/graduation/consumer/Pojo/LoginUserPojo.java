@@ -1,6 +1,6 @@
 package com.king.graduation.consumer.Pojo;
 
-import com.king.graduation.consumer.Entity.User;
+import Enties.User;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

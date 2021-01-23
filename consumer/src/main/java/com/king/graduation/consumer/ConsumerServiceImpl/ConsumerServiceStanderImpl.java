@@ -1,26 +1,37 @@
 package com.king.graduation.consumer.ConsumerServiceImpl;
 
+import Enties.Pool;
+import Enties.TicketRecord;
+import Enties.TicketType;
+import Enties.User;
 import com.alibaba.fastjson.JSONObject;
 import com.king.graduation.consumer.Config.RestTemplateConfig;
 import com.king.graduation.consumer.ConsumerServices.ConsumerServices;
-import com.king.graduation.consumer.Entity.TicketType;
-import com.king.graduation.consumer.Entity.User;
-import com.king.graduation.consumer.Mapper.TicketTypeMapperPlus;
-import com.king.graduation.consumer.Mapper.consumerMapper;
-import com.king.graduation.consumer.Mapper.consumerMapperPlus;
+import com.king.graduation.consumer.Mapper.*;
+import com.king.graduation.consumer.Pojo.Adult;
+import com.king.graduation.consumer.Pojo.BuyTicketPojo;
 import com.king.graduation.consumer.Pojo.LoginUserPojo;
-import com.king.graduation.consumer.Pojo.TicketRecodedPojo;
-import com.king.graduation.consumer.utils.*;
-import io.jsonwebtoken.Claims;
+import com.king.graduation.consumer.Pojo.Minor;
+import com.king.graduation.consumer.utils.RedisUtil;
+import com.king.graduation.consumer.utils.ResultVO;
+import com.king.graduation.consumer.utils.ResultVOForType;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import utils.GenerateCode;
+import utils.TokenUtil;
 
+import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.List;
+
 
 /**
  * @Author king
@@ -31,6 +42,12 @@ import java.io.IOException;
 public class ConsumerServiceStanderImpl implements ConsumerServices {
     @Autowired
     private consumerMapper consumerMapper;
+
+    @Resource
+    private TicketRecordMapper ticketRecordMapper;
+
+    @Resource
+    private poolMapper poolMapper;
 
     @Autowired
     private consumerMapperPlus consumerMapperPlus;
@@ -46,6 +63,8 @@ public class ConsumerServiceStanderImpl implements ConsumerServices {
 
     @Autowired
     private ResultVOForType resultVOForType;
+
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     private String host = "http://localhost:8081";
 
@@ -73,7 +92,7 @@ public class ConsumerServiceStanderImpl implements ConsumerServices {
     public ResultVO login(String loginType, User user, String code) {
 //        账号密码登录
         User accountLogin = consumerMapper.accountLogin(user.getPhone());
-        if (loginType.equals("accountLogin")) {
+        if ("accountLogin".equals(loginType)) {
             if (accountLogin == null) {
                 return ResultVO.getFailureResultVO("不存在该账号");
             } else if (!accountLogin.getPassword().equals(user.getPassword())) {
@@ -81,7 +100,7 @@ public class ConsumerServiceStanderImpl implements ConsumerServices {
             } else {
                 return ResultVO.getSuccessResultVO("登录成功", TokenUtil.getToken(accountLogin));
             }
-        } else if (loginType.equals("phoneLogin")) {
+        } else if ("phoneLogin".equals(loginType)) {
             //手机验证码登录
             String key = user.getPhone() + "_code";
             String userCode = redisUtil.stringGet(key);
@@ -155,30 +174,163 @@ public class ConsumerServiceStanderImpl implements ConsumerServices {
      */
     @Override
     @Transactional
-    public ResultVO BuyTicket(TicketRecodedPojo ticket, String token) {
-        if (ticket.getTicketName() == null) {
-            return ResultVO.getFailureResultVO("数据异常,请重新操作");
+    public ResultVO BuyTicket(BuyTicketPojo ticket, String token) {
+        //生成订单号
+        String orderNo = GenerateCode.getOrderIdByTime();
+        //购买时间
+        Date buyDate = new Date(new java.util.Date().getTime());
+        //用户id
+        long userId = TokenUtil.parseJWTForKey(token, "id");
+        //检查库存与所买票数
+        ResultVO resultVO = checkTicketReserve(ticket.getAdult().getNumbers(), ticket.getMinor().getNumbers());
+        assert resultVO != null;
+        if (resultVO != null) {
+            return resultVO;
         }
-        int ticketNumbers = consumerMapper.ticketNumbers(ticket.getTId(), ticket.getTicketName());
-        if (ticketNumbers - ticket.getNumbers() < 0) {
-            return ResultVO.getFailureResultVO("库存不足,无法购买您所需的" + ticket.getNumbers() + "张票");
-        }
-        TicketType ticketType = consumerMapper.getTicketTypeId(ticket.getTicketName());
-
-        ticket.setTicketType(ticketType);
-        ticket.setTId(ticketType.getTicketId());
-        ticket.setUId(TokenUtil.parseJWTForKey(token, "uid"));
-        ticket.setTotalPrice(ticket.getTicketPrice() * ticket.getNumbers());
-        if (consumerMapper.buyATicket(ticket) >= 1) {
-            consumerMapper.desTicketNumbers(ticket);
+        //执行添加记录
+        if (executionRecord(ticket.getAdult(), ticket.getMinor(), orderNo, buyDate, userId)) {
             return ResultVO.getSuccessResultVO("购买成功");
         }
         return ResultVO.getFailureResultVO("购买失败，发生未知异常");
     }
 
+    private boolean executionRecord(Adult adult, Minor minor, String orderNo, java.sql.Date buyDate, long userId) {
+        boolean adultBoolean = false;
+        boolean minorBoolean = false;
+        if (adult.getNumbers() > 0) {
+            if (recordAdultTicket(adult, orderNo, buyDate, userId)) {
+                adultBoolean = true;
+            }
+        } else {
+            adultBoolean = true;
+        }
+        if (minor.getNumbers() > 0) {
+            if (recordMinorTicket(minor, orderNo, buyDate, userId)) {
+                minorBoolean = true;
+            }
+        } else {
+            minorBoolean = true;
+        }
+
+        return adultBoolean && minorBoolean;
+    }
+
+    /**
+     * @Describe 添加成人票记录
+     * @Author king
+     * @Date 2021/1/23 - 17:27
+     * @Params [adult, orderNo, buyDate, userId]
+     */
+    private boolean recordAdultTicket(Adult adult, String orderNo, java.sql.Date buyDate, long userId) {
+        TicketRecord ticketRecord = null;
+        try {
+            Date effectiveDate = new java.sql.Date(simpleDateFormat.parse(adult.getDate()).getTime());
+            ticketRecord = ticketRecordTemplate(orderNo, adult.getNumbers(), adult.getTicketPrice(), buyDate, effectiveDate, userId, adult.getId());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (ticketRecordMapper.insert(ticketRecord) > 0) {
+            //更新票数
+            decreaseTicketNumbers(adult.getNumbers(), adult.getPool());
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @Describe 添加未成人票记录
+     * @Author king
+     * @Date 2021/1/23 - 17:27
+     * @Params [adult, orderNo, buyDate, userId]
+     */
+    private boolean recordMinorTicket(Minor minor, String orderNo, Date buyDate, long userId) {
+        TicketRecord ticketRecord = null;
+        try {
+            Date effectiveDate = new java.sql.Date(simpleDateFormat.parse(minor.getDate()).getTime());
+            ticketRecord = ticketRecordTemplate(orderNo, minor.getNumbers(), minor.getTicketPrice(), buyDate, effectiveDate, userId, minor.getId());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (ticketRecordMapper.insert(ticketRecord) > 0) {
+            //更新票数
+            decreaseTicketNumbers(minor.getNumbers(), minor.getPool());
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @Describe 购票记录模板
+     * @Author king
+     * @Date 2021/1/23 - 17:32
+     * @Params [orderNo, numbers, price, buyDate, userId, type]
+     */
+    private TicketRecord ticketRecordTemplate(String orderNo, int numbers, double price, java.sql.Date buyDate, java.sql.Date effectiveDate, long userId, long type) {
+        TicketRecord ticketRecord = new TicketRecord();
+        ticketRecord.setOrderNumber(orderNo);
+        ticketRecord.setNumbers(numbers);
+        ticketRecord.setMoney(numbers * price);
+        ticketRecord.setBookTime(buyDate);
+        ticketRecord.setEffectiveTime(effectiveDate);
+        ticketRecord.setUId(userId);
+        ticketRecord.setTId(type);
+        return ticketRecord;
+    }
+
+    /**
+     * @Describe 检查票数
+     * @Author king
+     * @Date 2021/1/23 - 17:10
+     * @Params [adultNumbers, minorNumbers]
+     */
+    private ResultVO checkTicketReserve(int adultNumbers, int minorNumbers) {
+        if (adultNumbers > 0) {
+            Pool adult = poolMapper.selectById(1);
+            if (adult.getTotalTicket() - adultNumbers < 0) {
+                return ResultVO.getFailureResultVO("成人票库存不足");
+            }
+        }
+        if (minorNumbers > 0) {
+            Pool minor = poolMapper.selectById(2);
+            if (minor.getTotalTicket() - minorNumbers < 0) {
+                return ResultVO.getFailureResultVO("未成人成人票库存不足");
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @Describe 更新票数
+     * @Author king
+     * @Date 2021/1/23 - 17:38
+     * @Params [numbers, type]
+     */
+    private int decreaseTicketNumbers(int numbers, long id) {
+        return poolMapper.decreaseTicketNumbers(numbers, id);
+    }
+
+    /**
+     * @Describe 加载购票信息
+     * @Author king
+     * @Date 2021/1/23 - 20:16
+     * @Params []
+     */
     @Override
-    public ResultVO remainingNumber(long id, String ticketName) {
-        return ResultVO.getSuccessResultVO("获取成功", consumerMapper.ticketTypeInfo(id, ticketName));
+    public ResultVO loadTicketInfo() {
+        List<Pool> pools = poolMapper.poolInfoList();
+        return ResultVO.getSuccessResultVO("获取成功", pools);
+    }
+
+    /**
+     * @Describe 加载购物车基本信息
+     * @Author king
+     * @Date 2021/1/23 - 22:20
+     * @Params []
+     */
+    @Override
+    public ResultVO loadShoppingCarInfo() {
+        List<TicketType> ticketTypes = ticketTypeMapperPlus.loadShoppingCarInfo();
+        return ResultVO.getSuccessResultVO("获取成功", ticketTypes);
     }
 
     /**
@@ -188,9 +340,8 @@ public class ConsumerServiceStanderImpl implements ConsumerServices {
      */
     @Override
     public ResultVOForType loadPersonalInfo(String token) {
-        Claims claims = TokenUtil.parseJWT(token);
-        int uid = (int) claims.get("uid");
-        LoginUserPojo userPojo = consumerMapper.loadPersonalInfo(uid);
+        long id = TokenUtil.parseJWTForKey(token, "id");
+        LoginUserPojo userPojo = consumerMapper.loadPersonalInfo(id);
         if (userPojo == null) {
             return resultVOForType.getFailureResultVO("不存在该用户");
         }

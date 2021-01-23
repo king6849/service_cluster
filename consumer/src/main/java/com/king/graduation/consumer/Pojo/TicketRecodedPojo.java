@@ -1,7 +1,7 @@
 package com.king.graduation.consumer.Pojo;
 
-import com.king.graduation.consumer.Entity.TicketRecord;
-import com.king.graduation.consumer.Entity.TicketType;
+import Enties.TicketRecord;
+import Enties.TicketType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -19,18 +19,19 @@ public class TicketRecodedPojo extends TicketRecord {
     private String ticketName;
     private double ticketPrice;
     private int allNumbers;
-    //折扣
-    private int discount;
 
-    public void setTicketType(TicketType ticketType) {
-        this.ticketId = ticketType.getTicketId();
-        this.ticketName = ticketType.getTicketName();
-        this.ticketPrice = ticketType.getTicketPrice();
-        this.allNumbers = ticketType.getAllNumbers();
-    }
+
+    private int discount;
 
     //用户电话
     private String phone;
     //昵称
     private String nickName;
+
+    public void setTicketType(TicketType ticketType) {
+        this.ticketName = ticketType.getTicketName();
+        this.ticketPrice = ticketType.getTicketPrice();
+    }
+
+
 }

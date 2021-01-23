@@ -4,19 +4,22 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
+import java.sql.Date;
 
+
+/**
+ * @author king
+ */
 @Getter
 @Setter
 @ToString
 public class TicketRecord {
 
-    private long ticketRecordId;
+    private long id;
+    private String orderNumber;
     private int numbers;
-    //下单时间
+    private double money;
     private Date bookTime;
-    private double totalPrice;
-    //具体哪一天可以使用该门票进场
     private Date effectiveTime;
     private long uId;
     private long tId;

@@ -1,25 +1,20 @@
 package com.king.graduation.consumer.Controller;
 
+import Enties.User;
 import com.king.graduation.consumer.ConsumerServices.ConsumerServices;
-import com.king.graduation.consumer.Entity.User;
+import com.king.graduation.consumer.Pojo.BuyTicketPojo;
 import com.king.graduation.consumer.Pojo.LoginUserPojo;
-import com.king.graduation.consumer.Pojo.TicketRecodedPojo;
-import com.king.graduation.consumer.utils.DateUtil;
 import com.king.graduation.consumer.utils.ResultVO;
 import com.king.graduation.consumer.utils.ResultVOForType;
-import com.king.graduation.consumer.utils.TokenUtil;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import utils.TokenUtil;
 
-import java.util.Calendar;
-
+/**
+ * @author king
+ */
 @RestController
 @RequestMapping(path = "/client")
 public class ConsumerController {
@@ -63,11 +58,7 @@ public class ConsumerController {
      * @Date 2020/12/1
      */
     @RequestMapping(path = "/ticket", method = RequestMethod.PUT)
-    public ResultVO buyTicket(@RequestBody TicketRecodedPojo ticket, @RequestHeader String token) {
-        //下单时间
-        ticket.setBookTime(Calendar.getInstance().getTime());
-        //哪一天可用
-        ticket.setEffectiveTime(DateUtil.moreDate(1));
+    public ResultVO buyTicket(@RequestBody BuyTicketPojo ticket, @RequestHeader String token) {
         return consumerServicesStanderImpl.BuyTicket(ticket, token);
     }
 
@@ -76,9 +67,20 @@ public class ConsumerController {
      * @Author king
      * @Date 2020/12/2
      */
-    @RequestMapping(path = "/ticketInfo/{ticketName}", method = RequestMethod.GET)
-    public ResultVO remainingNumber(@PathVariable String ticketName) {
-        return consumerServicesStanderImpl.remainingNumber(0, ticketName);
+    @RequestMapping(path = "/ticketInfo", method = RequestMethod.GET)
+    public ResultVO loadTicketInfo() {
+        return consumerServicesStanderImpl.loadTicketInfo();
+    }
+
+    /**
+     * @Describe 购物车基本信息
+     * @Author king
+     * @Date 2021/1/23 - 22:23
+     * @Params []
+     */
+    @RequestMapping(path = "/shoppingcar", method = RequestMethod.GET)
+    public ResultVO loadShoppingCarInfo() {
+        return consumerServicesStanderImpl.loadShoppingCarInfo();
     }
 
     /**
@@ -99,7 +101,7 @@ public class ConsumerController {
     @RequestMapping(value = "/personal", method = RequestMethod.POST)
     public ResultVO updatePersonal(@RequestBody LoginUserPojo user, @RequestHeader String token) {
         Claims claims = TokenUtil.parseJWT(token);
-        user.setId(Long.parseLong(claims.get("uid").toString()));
+        user.setId(Long.parseLong(claims.get("id").toString()));
         return consumerServicesStanderImpl.updatePersonalInfo(user);
     }
 

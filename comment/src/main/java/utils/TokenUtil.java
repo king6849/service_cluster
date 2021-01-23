@@ -1,11 +1,11 @@
-package com.king.graduation.consumer.utils;
+package utils;
 
-import com.king.graduation.consumer.Entity.User;
+
+import Enties.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.junit.Test;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
@@ -82,7 +82,7 @@ public class TokenUtil {
         // 让我们设置JWT声明
         return Jwts.builder()
                 .claim("phone", user.getPhone())
-                .claim("uid", user.getId())
+                .claim("id", user.getId())
                 //签发人
                 .setIssuer(issuer)
                 .signWith(signatureAlgorithm, signingKey);
@@ -105,7 +105,14 @@ public class TokenUtil {
     }
 
 
+    /**
+     * @Describe : 用于生成token 字符串
+     * @Author : king
+     * @Date : 2021/1/20 - 16:10
+     * @Params : [builder, ttlMillis]
+     */
     public static String generateToken(JwtBuilder builder, long ttlMillis) {
+
         // 生成签发时间
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
@@ -123,30 +130,27 @@ public class TokenUtil {
 
 
     /**
-     * Token解析方法
-     *
-     * @param jwt Token
-     * @return
+     * @Describe Token解析方法
+     * @Author king
+     * @Date 2021/1/20 - 16:11
+     * @Params [jwt]
      */
     public static Claims parseJWT(String jwt) {
         // 如果这行代码不是签名的JWS(如预期)，那么它将抛出异常
-        Claims claims = Jwts.parser()
+        return Jwts.parser()
                 .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET))
                 .parseClaimsJws(jwt).getBody();
-        return claims;
     }
 
+    /**
+     * @Describe 解析token，并获取指定key的值
+     * @Author king
+     * @Date 2021/1/20 - 16:11
+     * @Params [jwt, key]
+     */
     public static long parseJWTForKey(String jwt, String key) {
         Claims claims = parseJWT(jwt);
         return Long.parseLong(claims.get(key).toString());
-    }
-
-    @Test
-    public void parseTokenTest() {
-        String token = "eyJhbGciOiJIUzI1NiJ9.eyJwaG9uZSI6IjEyMyIsInVpZCI6MSwiaXNzIjoiRmFSdWFuIiwiaWF0IjoxNjA2NzE1MTc1LCJleHAiOjE2MDY5MzExNzV9.tah8Hw9SgLyHS1FtzEyc9bD6RiqgBkzj54HLXFsFpkc";
-        Claims claims = TokenUtil.parseJWT(token);
-        System.out.println(claims.get("uid"));
-        System.out.println(claims.get("phone"));
     }
 
 }

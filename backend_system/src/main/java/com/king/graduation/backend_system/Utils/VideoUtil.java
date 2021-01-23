@@ -17,18 +17,62 @@ import java.io.IOException;
  */
 public class VideoUtil {
 
-    public static final String VIDEO_BASE_PATH ="F:\\idea\\projects\\bishe\\video\\";
-    public static final String ZERO_VIDEO_PATH ="F:\\idea\\projects\\bishe\\video\\zeroVideo\\";
-    public static final String FREE_VIDEO_PATH ="F:\\idea\\projects\\bishe\\video\\freestyleVideo\\";
-    public static final String BUTTER_VIDEO_PATH ="F:\\idea\\projects\\bishe\\video\\butterflyStrokeVideo\\";
-    public static final String BREAST_VIDEO_PATH ="F:\\idea\\projects\\bishe\\video\\breaststrokeVideo\\";
+    public static String Base_Path = "E:\\idea\\projects\\bishe";
+    public static String VIDEO_BASE_PATH = Base_Path + "\\video\\";
+    public static String ZERO_VIDEO_PATH = Base_Path + "\\video\\zeroVideo\\";
+    public static String FREE_VIDEO_PATH = Base_Path + "\\video\\freestyleVideo\\";
+    public static String BUTTER_VIDEO_PATH = Base_Path + "\\video\\butterflyStrokeVideo\\";
+    public static String BREAST_VIDEO_PATH = Base_Path + "\\video\\breaststrokeVideo\\";
 
-    public static final String ZERO_VIDEO_IMG_PATH = ZERO_VIDEO_PATH +"img\\";
-    public static final String FREE_VIDEO_IMG_PATH = FREE_VIDEO_PATH +"img\\";
-    public static final String BUTTER_VIDEO_IMG_PATH = BUTTER_VIDEO_PATH +"img\\";
-    public static final String BREAST_VIDEO_IMG_PATH = BREAST_VIDEO_PATH +"img\\";
+    public static String ZERO_VIDEO_IMG_PATH = ZERO_VIDEO_PATH + "img\\";
+    public static String FREE_VIDEO_IMG_PATH = FREE_VIDEO_PATH + "img\\";
+    public static String BUTTER_VIDEO_IMG_PATH = BUTTER_VIDEO_PATH + "img\\";
+    public static String BREAST_VIDEO_IMG_PATH = BREAST_VIDEO_PATH + "img\\";
 
-    public static final String SUFFIX =".jpg";
+    public static final String SUFFIX = ".jpg";
+
+
+    /**
+     * @Describe 返回视屏路径
+     * @Author king
+     * @Date 2021/1/21 - 23:07
+     * @Params [type]
+     */
+    public static String getVideoPath(int type) {
+        switch (type) {
+            case 1:
+                return ZERO_VIDEO_PATH;
+            case 2:
+                return FREE_VIDEO_PATH;
+            case 3:
+                return BUTTER_VIDEO_PATH;
+            case 4:
+                return BREAST_VIDEO_PATH;
+            default:
+                return VIDEO_BASE_PATH;
+        }
+    }
+
+    /**
+     * @Describe 返回视屏封面路径
+     * @Author king
+     * @Date 2021/1/21 - 23:07
+     * @Params [type]
+     */
+    public static String getVideoImgPath(int type) {
+        switch (type) {
+            case 1:
+                return ZERO_VIDEO_IMG_PATH;
+            case 2:
+                return FREE_VIDEO_IMG_PATH;
+            case 3:
+                return BUTTER_VIDEO_IMG_PATH;
+            case 4:
+                return BREAST_VIDEO_IMG_PATH;
+            default:
+                return VIDEO_BASE_PATH;
+        }
+    }
 
     /**
      * 获取视频时长，单位为秒
@@ -95,7 +139,7 @@ public class VideoUtil {
 
     public static void main(String[] args) {
         String videoName = "初学游泳第一节课零基础学员，蹬池边漂浮练习要点_ 憋气、漂浮、滑行 标清(270P).qlv.mp4";
-        String realVideo=VideoUtil.ZERO_VIDEO_PATH+videoName;
+        String realVideo = VideoUtil.ZERO_VIDEO_PATH + videoName;
         File file = new File(realVideo);
         String fileName = file.getName().split("\\.")[0];
 

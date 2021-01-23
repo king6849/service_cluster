@@ -1,6 +1,4 @@
-package com.king.graduation.consumer.utils;
-
-import org.junit.Test;
+package utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -13,6 +11,9 @@ import java.util.Date;
 public class DateUtil {
     private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+    public static SimpleDateFormat getSimpleDateFormat() {
+        return simpleDateFormat;
+    }
 
     public static Date currentDate(int year, int month, int dates, int week) {
         Calendar calendar = Calendar.getInstance();
@@ -31,11 +32,5 @@ public class DateUtil {
         return currentDate(0, 0, data, 0);
     }
 
-    @Test
-    public void test() {
-        Calendar calendar = Calendar.getInstance();
-        System.out.println(simpleDateFormat.format(calendar.getTime()));
-        System.out.println(simpleDateFormat.format(DateUtil.currentDate(0, 0, 1, 0)));
-    }
 
 }

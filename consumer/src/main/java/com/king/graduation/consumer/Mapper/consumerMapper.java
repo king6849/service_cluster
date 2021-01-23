@@ -1,8 +1,8 @@
 package com.king.graduation.consumer.Mapper;
 
-import com.king.graduation.consumer.Entity.TicketRecord;
-import com.king.graduation.consumer.Entity.TicketType;
-import com.king.graduation.consumer.Entity.User;
+import Enties.TicketRecord;
+import Enties.TicketType;
+import Enties.User;
 import com.king.graduation.consumer.Pojo.LoginUserPojo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -38,7 +38,7 @@ public interface consumerMapper {
     TicketType ticketTypeInfo(@Param("ticketId") long ticketId,@Param("ticketName") String ticketName);
 
     //拉取个人信息
-    LoginUserPojo loadPersonalInfo(int id);
+    LoginUserPojo loadPersonalInfo(long id);
 
     //更新手机，性别，昵称，密码
     int updatePersonal(User user);

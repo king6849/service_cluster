@@ -6,19 +6,20 @@ import lombok.ToString;
 
 import java.io.Serializable;
 
+/**
+ * @author king
+ */
 @Getter
 @Setter
 @ToString
 public class User implements Serializable {
 
     private long id;
-    private String openId;
     private String phone;
-    private String sex;
-    private String userAccount;
     private String nickName;
     private String password;
     private String avatar;
+    private String sex;
     private long level;
 
 
