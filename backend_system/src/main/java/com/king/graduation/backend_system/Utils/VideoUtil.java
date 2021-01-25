@@ -17,17 +17,18 @@ import java.io.IOException;
  */
 public class VideoUtil {
 
-    public static String Base_Path = "E:\\idea\\projects\\bishe";
-    public static String VIDEO_BASE_PATH = Base_Path + "\\video\\";
-    public static String ZERO_VIDEO_PATH = Base_Path + "\\video\\zeroVideo\\";
-    public static String FREE_VIDEO_PATH = Base_Path + "\\video\\freestyleVideo\\";
-    public static String BUTTER_VIDEO_PATH = Base_Path + "\\video\\butterflyStrokeVideo\\";
-    public static String BREAST_VIDEO_PATH = Base_Path + "\\video\\breaststrokeVideo\\";
+//    public static String Base_Path = "E:\\idea\\projects\\bishe";
+    public static String Base_Path = "/data/home/lian/MyApplication/develop/idea/projects/bishe";
+    public static String VIDEO_BASE_PATH = Base_Path + "/video/";
+    public static String ZERO_VIDEO_PATH = Base_Path + "/video/zeroVideo/";
+    public static String FREE_VIDEO_PATH = Base_Path + "/video/freestyleVideo/";
+    public static String BUTTER_VIDEO_PATH = Base_Path + "/video/butterflyStrokeVideo/";
+    public static String BREAST_VIDEO_PATH = Base_Path + "/video/breaststrokeVideo/";
 
-    public static String ZERO_VIDEO_IMG_PATH = ZERO_VIDEO_PATH + "img\\";
-    public static String FREE_VIDEO_IMG_PATH = FREE_VIDEO_PATH + "img\\";
-    public static String BUTTER_VIDEO_IMG_PATH = BUTTER_VIDEO_PATH + "img\\";
-    public static String BREAST_VIDEO_IMG_PATH = BREAST_VIDEO_PATH + "img\\";
+    public static String ZERO_VIDEO_IMG_PATH = ZERO_VIDEO_PATH + "img/";
+    public static String FREE_VIDEO_IMG_PATH = FREE_VIDEO_PATH + "img/";
+    public static String BUTTER_VIDEO_IMG_PATH = BUTTER_VIDEO_PATH + "img/";
+    public static String BREAST_VIDEO_IMG_PATH = BREAST_VIDEO_PATH + "img/";
 
     public static final String SUFFIX = ".jpg";
 
@@ -135,18 +136,6 @@ public class VideoUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static void main(String[] args) {
-        String videoName = "初学游泳第一节课零基础学员，蹬池边漂浮练习要点_ 憋气、漂浮、滑行 标清(270P).qlv.mp4";
-        String realVideo = VideoUtil.ZERO_VIDEO_PATH + videoName;
-        File file = new File(realVideo);
-        String fileName = file.getName().split("\\.")[0];
-
-        System.out.println(fileName);
-
-        String imgName = VideoUtil.ZERO_VIDEO_IMG_PATH + fileName + SUFFIX;
-        VideoUtil.getVideoPic(file, imgName);
     }
 
 }

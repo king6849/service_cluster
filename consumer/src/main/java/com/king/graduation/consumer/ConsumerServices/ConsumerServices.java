@@ -68,4 +68,6 @@ public interface ConsumerServices {
      * @Date 2020/12/1
      */
     ResultVO verifyPassword(String password, String token);
+
+
 }

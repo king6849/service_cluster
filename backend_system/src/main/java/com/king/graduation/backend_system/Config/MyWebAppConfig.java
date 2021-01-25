@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 public class MyWebAppConfig implements WebMvcConfigurer {
-    public static final String AVATAR_PATH = VideoUtil.Base_Path+"\\images\\avatar\\";
+    public static final String AVATAR_PATH = VideoUtil.Base_Path+"/images/avatar/";
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

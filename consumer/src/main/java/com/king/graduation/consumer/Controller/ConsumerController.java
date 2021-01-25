@@ -83,6 +83,9 @@ public class ConsumerController {
         return consumerServicesStanderImpl.loadShoppingCarInfo();
     }
 
+
+
+
     /**
      * @Describe 拉取个人信息
      * @Author king

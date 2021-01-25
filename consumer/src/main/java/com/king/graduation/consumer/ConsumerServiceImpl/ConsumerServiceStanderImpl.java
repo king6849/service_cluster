@@ -68,9 +68,9 @@ public class ConsumerServiceStanderImpl implements ConsumerServices {
 
     private String host = "http://localhost:8081";
 
-    private String fileRootPath = "F:\\idea\\projects\\bishe\\images";
+    private String fileRootPath = "F:/idea/projects/bishe/images";
 
-    private String avatarBasePath = fileRootPath + "\\avatar";
+    private String avatarBasePath = fileRootPath + "/avatar";
 
     private File avatarBasePathFile = new File(avatarBasePath);
 
@@ -388,7 +388,7 @@ public class ConsumerServiceStanderImpl implements ConsumerServices {
             String oldAva = oldAvatar.substring(oldAvatar.lastIndexOf("/") + 1);
             if (!oldAva.equals("defaultAvatar.jpg")) {
                 System.out.println("删除旧的头像 " + oldAva);
-                new File(avatarBasePath + "\\" + oldAva).delete();
+                new File(avatarBasePath + "/" + oldAva).delete();
             }
         } catch (IOException e) {
             e.printStackTrace();
