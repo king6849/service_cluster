@@ -1,17 +1,18 @@
 package Enties;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
-@Setter
-@Getter
-@ToString
+@Data
 public class ClassTime {
 
-    private long id;
-    private java.sql.Time startTime;
-    private java.sql.Time endTime;
+  private long id;
+  private String classLabel;
+  @JsonFormat(pattern = "hh:MM")
+  private java.sql.Time classStartTime;
+  @JsonFormat(pattern = "hh:MM")
+  private java.sql.Time classEndTime;
+
+
 
 }

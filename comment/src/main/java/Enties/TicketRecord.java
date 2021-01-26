@@ -24,4 +24,17 @@ public class TicketRecord {
     private long uId;
     private long tId;
 
+    public TicketRecord(long id, String orderNumber, int numbers, double money, Date bookTime, Date effectiveTime, long uId, long tId) {
+        this.id = id;
+        this.orderNumber = orderNumber;
+        this.numbers = numbers;
+        this.money = money;
+        this.bookTime = bookTime;
+        this.effectiveTime = effectiveTime;
+        this.uId = uId;
+        this.tId = tId;
+    }
+
+    public TicketRecord() {
+    }
 }
