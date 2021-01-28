@@ -4,6 +4,7 @@ import Enties.ClassInfo;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.king.graduation.consumer.Pojo.ClassKinds;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -22,6 +23,22 @@ public interface ClassInfoMapper extends BaseMapper<ClassInfo> {
      */
     List<ClassKinds> classRemainder();
 
-    List<ClassInfo> classInfoList();
 
+    List<Long> classInfoList();
+
+    /**
+     * @Describe 检查可报名人数
+     * @Author king
+     * @Date 2021/1/27 - 下午7:34
+     * @Params [iId, uTime]
+     */
+    List<ClassInfo> checkRemainder(@Param("cId") long cId, @Param("uTime") long uTime);
+
+    /**
+     * @Describe 更新可报名人数
+     * @Author king
+     * @Date 2021/1/27 - 下午7:54
+     * @Params [uTime, id]
+     */
+    int updateRemainder(@Param("uTime") long uTime, @Param("id") long id);
 }

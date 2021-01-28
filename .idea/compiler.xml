@@ -9,8 +9,8 @@
         <outputRelativeToContentRoot value="true" />
         <module name="consumer" />
         <module name="chat" />
-        <module name="backend_system" />
         <module name="comment" />
+        <module name="backend_system" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="8">

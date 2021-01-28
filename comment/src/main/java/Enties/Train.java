@@ -1,31 +1,21 @@
 package Enties;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import lombok.Data;
 
-import java.sql.Date;
+import java.io.Serializable;
 
-@Getter
-@Setter
-@ToString
-public class Train {
+@Data
+public class Train implements Serializable {
 
+    @TableId(value = "id",type = IdType.AUTO)
     private long id;
     private java.sql.Date makeTime;
-    private String members;
+    private long members;
     private long cId;
     private long iId;
     private long uTime;
+    private int status;
 
-    public Train() {
-    }
-
-    public Train(long id, Date makeTime, String members, long cId, long iId) {
-        this.id = id;
-        this.makeTime = makeTime;
-        this.members = members;
-        this.cId = cId;
-        this.iId = iId;
-    }
 }
